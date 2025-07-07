@@ -1,10 +1,15 @@
-import Image from "next/image";
-import LoginForm from "@/components/features/auth/LoginForm";
+"use client";
+
+import LoginForm from "./components/features/auth/LoginForm";
+import SignupForm from "./components/features/auth/SignupForm";
 
 export default function Home() {
   return (
-    <div>
-      <h1 className="text-2xl text-blue-500">THIS IS THE HOMEPAGE</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <div>
+        <LoginForm />
+        <SignupForm />
+      </div>
     </div>
   );
 }

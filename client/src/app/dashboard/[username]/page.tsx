@@ -1,5 +1,5 @@
 "use client";
-import Dashboard from "@/components/features/dashboard/Dashboard";
+import Dashboard from "@/app/components/features/dashboard/Dashboard";
 
 const DashboardPage = () => {
   return (
