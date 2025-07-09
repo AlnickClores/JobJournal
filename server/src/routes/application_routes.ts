@@ -1,9 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import {
-  getApplication,
   insertApplication,
-  getApplicationByUserId,
+  getApplication,
+  deleteApplication,
 } from "../controllers/application_controller";
 import { authMiddleware } from "../middleware/authMiddleware";
 
@@ -11,10 +11,14 @@ dotenv.config();
 
 const router = express.Router();
 
-router.get("/getApplication", getApplication);
+router.get("/getApplication/:userId", authMiddleware, getApplication);
 
-router.get("/getApplication/:userId", authMiddleware, getApplicationByUserId);
+router.post("/insertApplication/:userId", authMiddleware, insertApplication);
 
-router.post("/insertApplication", authMiddleware, insertApplication);
+router.delete(
+  "/deleteApplication/:applicationId",
+  authMiddleware,
+  deleteApplication
+);
 
 export default router;

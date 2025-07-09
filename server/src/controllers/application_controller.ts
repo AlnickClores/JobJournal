@@ -1,14 +1,17 @@
 import { Request, Response } from "express";
 import {
-  getUserApplication,
+  checkIfApplicationExists,
   insertUserApplication,
-  getApplicationById,
+  getUserApplication,
+  deleteUserApplication,
 } from "../models/application_models";
+import app from "../server";
 
 export const insertApplication = async (req: Request, res: Response) => {
   try {
+    const userId = parseInt(req.params.userId, 10);
+
     const {
-      userId,
       companyName,
       positionApplied,
       dateApplied,
@@ -16,13 +19,7 @@ export const insertApplication = async (req: Request, res: Response) => {
       interviewDate,
     } = req.body;
 
-    if (
-      !userId ||
-      !companyName ||
-      !positionApplied ||
-      !dateApplied ||
-      !progress
-    ) {
+    if (!companyName || !positionApplied || !dateApplied) {
       res.status(400).json({ error: "All fields are required" });
       return;
     }
@@ -58,11 +55,11 @@ export const insertApplication = async (req: Request, res: Response) => {
   }
 };
 
-export const getApplicationByUserId = async (req: Request, res: Response) => {
+export const getApplication = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId, 10);
 
-    const getApplicationByUserId = await getApplicationById(userId);
+    const getApplicationByUserId = await getUserApplication(userId);
 
     res.status(200).json({
       message: "Application fetched successfully",
@@ -74,22 +71,26 @@ export const getApplicationByUserId = async (req: Request, res: Response) => {
   }
 };
 
-export const getApplication = async (req: Request, res: Response) => {
+export const deleteApplication = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.body;
+    const applicationId = parseInt(req.params.applicationId, 10);
 
-    const getApplications = await getUserApplication(userId);
+    const applicationExists = await checkIfApplicationExists(applicationId);
 
-    if (!getApplications) {
-      res.status(404).json({ error: "No applications found for this user" });
+    if (!applicationExists) {
+      res.status(404).json({ error: "Application details not found" });
       return;
     }
+
+    const deleteApplicationById = await deleteUserApplication(applicationId);
+
     res.status(200).json({
-      message: "Applications fetched successfully",
-      applications: getApplications,
+      message:
+        "Application with ID " + applicationId + " was deleted successfully",
+      deleted_application: deleteApplicationById,
     });
   } catch (error) {
-    console.error("Error fetching application:", error);
+    console.error("Error deleting application:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
