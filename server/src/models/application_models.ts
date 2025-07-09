@@ -1,6 +1,13 @@
 import pool from "../config/database";
 import { RowDataPacket } from "mysql2";
 
+export const checkIfApplicationExists = async (applicationId: number) => {
+  const sql = "SELECT * FROM applications WHERE id = ?";
+  const [rows] = await pool.query<RowDataPacket[]>(sql, [applicationId]);
+
+  return rows.length > 0 ? rows[0] : null;
+};
+
 export const insertUserApplication = async (
   user_id: number,
   companyName: string,
@@ -30,16 +37,31 @@ export const getUserApplication = async (applicationId: number) => {
   return rows;
 };
 
+export const updateUserApplication = async (
+  application_id: number,
+  companyName: string,
+  positionApplied: string,
+  dateApplied: string,
+  progress: string,
+  interviewDate: string
+) => {
+  const sql =
+    "UPDATE applications SET company_name = ?, position_applied = ?, date_applied = ?, progress = ?, interview_date = ? WHERE id = ?";
+  const [result] = await pool.query(sql, [
+    companyName,
+    positionApplied,
+    dateApplied,
+    progress,
+    interviewDate,
+    application_id,
+  ]);
+
+  return result;
+};
+
 export const deleteUserApplication = async (applicationId: number) => {
   const sql = "DELETE FROM applications WHERE id = ?";
   const [result] = await pool.query(sql, [applicationId]);
 
   return result;
-};
-
-export const checkIfApplicationExists = async (applicationId: number) => {
-  const sql = "SELECT * FROM applications WHERE id = ?";
-  const [rows] = await pool.query<RowDataPacket[]>(sql, [applicationId]);
-
-  return rows.length > 0 ? rows[0] : null;
 };

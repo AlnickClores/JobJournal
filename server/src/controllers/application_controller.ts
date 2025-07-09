@@ -3,9 +3,9 @@ import {
   checkIfApplicationExists,
   insertUserApplication,
   getUserApplication,
+  updateUserApplication,
   deleteUserApplication,
 } from "../models/application_models";
-import app from "../server";
 
 export const insertApplication = async (req: Request, res: Response) => {
   try {
@@ -67,6 +67,45 @@ export const getApplication = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error fetching application by user ID:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateApplication = async (req: Request, res: Response) => {
+  try {
+    const applicationId = parseInt(req.params.applicationId, 10);
+
+    const {
+      company_name,
+      position_applied,
+      date_applied,
+      progress,
+      interview_date,
+    } = req.body;
+
+    const applicationExists = await checkIfApplicationExists(applicationId);
+
+    if (!applicationExists) {
+      res.status(404).json({ error: "Application details not found" });
+      return;
+    }
+
+    const updateApplication = await updateUserApplication(
+      applicationId,
+      company_name || applicationExists.company_name,
+      position_applied || applicationExists.position_applied,
+      date_applied || applicationExists.date_applied,
+      progress || applicationExists.progress,
+      interview_date || applicationExists.interview_date
+    );
+
+    res.status(200).json({
+      message:
+        "Application with ID " + applicationId + " was updated successfully",
+      updated_application: updateApplication,
+    });
+  } catch (error) {
+    console.error("Error updating application:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
