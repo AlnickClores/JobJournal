@@ -21,6 +21,8 @@ export const login = async (username: string, password: string) => {
       username,
       password,
     });
+    sessionStorage.setItem("token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
     return response.data;
   } catch (error) {
     console.error("Error during login:", error);

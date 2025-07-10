@@ -25,7 +25,8 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const res = await login(formData.username, formData.password);
-      router.push(`/dashboard/${formData.username}`);
+      router.push("/dashboard/");
+      console.log("Login successful:", res);
     } catch (err: any) {
       console.error("Login failed:", err);
       setMessage(err.response?.data.error || "An error occurred during login.");
