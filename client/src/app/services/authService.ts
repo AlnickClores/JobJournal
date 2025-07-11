@@ -29,3 +29,24 @@ export const login = async (username: string, password: string) => {
     throw error;
   }
 };
+
+export const validateToken = async () => {
+  const token = sessionStorage.getItem("token");
+  try {
+    if (!token) {
+      console.error("No token found, redirecting to login page.");
+      return;
+    }
+
+    const response = await axios.get("http://localhost:3030/api/dashboard", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error validating the token.", error);
+    throw error;
+  }
+};

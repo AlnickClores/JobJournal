@@ -1,9 +1,11 @@
 "use client";
 
 import Dashboard from "@/app/components/features/dashboard/Dashboard";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { validateToken } from "../services/authService";
+import { getApplications } from "../services/applicationService";
+import { Application } from "../types";
 
 interface DashboardData {
   message: string;
@@ -15,31 +17,42 @@ interface DashboardData {
 
 const DashboardPage = () => {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [applications, setApplications] = useState<Application[] | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found, redirecting to login page.");
-      router.push("/");
-      return;
-    }
-    axios
-      .get("http://localhost:3030/api/dashboard", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setData(res.data))
-      .catch(() => {
+    const fetchData = async () => {
+      try {
+        const res = await validateToken();
+        setData(res);
+
+        const applications = await getApplications(res.user.id);
+        setApplications(applications.application);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
         sessionStorage.clear();
         router.push("/");
-      });
+      }
+    };
+    fetchData();
   }, []);
 
   return (
-    <div>
-      <h1 className="text-2xl text-blue-500">THIS IS THE DASHBOARD PAGE</h1>
-      <h1>Hello, {data && data.user.username}</h1>
-      <Dashboard />
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100">
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-purple-600 mb-5">
+          Hi, {data?.user.username}!
+        </h1>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Job Applications
+          </h1>
+          <p className="text-gray-600">
+            Track and manage your job application progress
+          </p>
+        </div>
+        <Dashboard applications={applications} />
+      </div>
     </div>
   );
 };
