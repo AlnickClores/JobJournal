@@ -7,6 +7,7 @@ import DesktopTable from "./DesktopTable";
 import MobileTable from "./MobileTable";
 import { formatDate } from "@/app/utils/formatters";
 import { getProgressBadge } from "@/app/utils/badgeHelper";
+import { useRouter } from "next/navigation";
 
 const Dashboard = ({
   applications,
@@ -16,7 +17,7 @@ const Dashboard = ({
   if (!applications || applications.length === 0) {
     return <NoApplications />;
   }
-
+  const router = useRouter();
   return (
     <div>
       <StatusCards applications={applications} />
@@ -27,7 +28,10 @@ const Dashboard = ({
             <h2 className="text-lg font-semibold text-gray-900">
               Applications Overview
             </h2>
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+            <button
+              onClick={() => router.push("/applicationForm")}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+            >
               Add New Application
             </button>
           </div>

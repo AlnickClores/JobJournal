@@ -19,3 +19,25 @@ export const getApplications = async (userId: number) => {
     throw error;
   }
 };
+
+export const insertApplication = async (
+  userId: number,
+  applicationForm: object
+) => {
+  try {
+    const token = sessionStorage.getItem("token");
+    const response = await axios.post(
+      `${API_BASE_URL}/insertApplication/${userId}`,
+      applicationForm,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error inserting application: ", error);
+    throw error;
+  }
+};

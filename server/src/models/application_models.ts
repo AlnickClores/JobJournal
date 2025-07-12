@@ -14,8 +14,10 @@ export const insertUserApplication = async (
   positionApplied: string,
   dateApplied: string,
   progress: string,
-  interviewDate: string
+  interviewDate: string | null
 ) => {
+  const cleanedInterviewDate = interviewDate === "" ? null : interviewDate;
+
   const sql =
     "INSERT INTO applications (user_id, company_name, position_applied, date_applied, progress, interview_date) VALUES (?, ?, ?, ?, ?, ?)";
   const [result] = await pool.query(sql, [
@@ -24,7 +26,7 @@ export const insertUserApplication = async (
     positionApplied,
     dateApplied,
     progress,
-    interviewDate,
+    cleanedInterviewDate,
   ]);
 
   return result;
