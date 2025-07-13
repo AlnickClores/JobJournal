@@ -41,3 +41,20 @@ export const insertApplication = async (
     throw error;
   }
 };
+
+export const deleteApplication = async (applicationId: number) => {
+  try {
+    const token = sessionStorage.getItem("token");
+    const response = await axios.delete(
+      `${API_BASE_URL}/deleteApplication/${applicationId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Error deleting application with id: ", applicationId);
+  }
+};

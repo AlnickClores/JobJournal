@@ -5,13 +5,20 @@ interface Props {
   applications: Application[];
   formatDate: (date: string) => string;
   getProgressBadge: (progress: string) => JSX.Element;
+  sortedApplications: Application[];
+  onDeleteClick: (app: Application) => void;
 }
 
-const MobileTable = ({ applications, formatDate, getProgressBadge }: Props) => {
+const MobileTable = ({
+  formatDate,
+  getProgressBadge,
+  sortedApplications,
+  onDeleteClick,
+}: Props) => {
   return (
     <div className="lg:hidden">
       <div className="divide-y divide-gray-200">
-        {applications.map((application) => (
+        {sortedApplications.map((application) => (
           <div
             key={application.id}
             className="p-6 hover:bg-purple-50/50 transition-colors duration-150"
@@ -44,7 +51,10 @@ const MobileTable = ({ applications, formatDate, getProgressBadge }: Props) => {
               <button className="text-purple-600 hover:text-purple-900 text-sm font-medium transition-colors duration-150">
                 Edit
               </button>
-              <button className="text-red-600 hover:text-red-900 text-sm font-medium transition-colors duration-150">
+              <button
+                onClick={() => onDeleteClick(application)}
+                className="text-red-600 hover:text-red-900 text-sm font-medium transition-colors duration-150"
+              >
                 Delete
               </button>
             </div>

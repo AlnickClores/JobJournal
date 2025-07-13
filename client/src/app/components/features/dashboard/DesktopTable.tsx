@@ -5,12 +5,15 @@ interface Props {
   applications: Application[];
   formatDate: (date: string) => string;
   getProgressBadge: (progress: string) => JSX.Element;
+  sortedApplications: Application[];
+  onDeleteClick: (app: Application) => void;
 }
 
 const DesktopTable = ({
-  applications,
   formatDate,
   getProgressBadge,
+  sortedApplications,
+  onDeleteClick,
 }: Props) => {
   return (
     <div className="hidden lg:block overflow-x-auto">
@@ -35,7 +38,7 @@ const DesktopTable = ({
           </tr>
         </thead>
         <tbody className="bg-white/50 divide-y divide-gray-200">
-          {applications.map((application, index) => (
+          {sortedApplications.map((application, index) => (
             <tr
               key={application.id}
               className={`hover:bg-purple-50/50 transition-colors duration-150 ${
@@ -68,7 +71,10 @@ const DesktopTable = ({
                   <button className="text-purple-600 hover:text-purple-900 transition-colors duration-150">
                     Edit
                   </button>
-                  <button className="text-red-600 hover:text-red-900 transition-colors duration-150">
+                  <button
+                    onClick={() => onDeleteClick(application)}
+                    className="text-red-600 hover:text-red-900 transition-colors duration-150"
+                  >
                     Delete
                   </button>
                 </div>
