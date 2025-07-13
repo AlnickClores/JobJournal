@@ -33,21 +33,11 @@ const InsertApplicationForm = ({ userData }: InsertApplicationFormProps) => {
     interviewDate: "",
   });
 
-  const progressOptions = [
-    "submitted",
-    "assessment",
-    "initial interview",
-    "technical interview",
-    "final interview",
-    "hired",
-    "failed",
-  ];
+  const progressOptions = ["submitted", "interview", "offer", "rejected"];
 
-  const isInterviewDateRequired = [
-    "initial interview",
-    "technical interview",
-    "final interview",
-  ].includes(applicationForm.progress);
+  const isInterviewDateRequired = ["interview"].includes(
+    applicationForm.progress
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

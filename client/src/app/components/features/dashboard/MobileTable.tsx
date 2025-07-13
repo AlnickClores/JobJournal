@@ -7,6 +7,7 @@ interface Props {
   getProgressBadge: (progress: string) => JSX.Element;
   sortedApplications: Application[];
   onDeleteClick: (app: Application) => void;
+  onEditClick: (app: Application) => void;
 }
 
 const MobileTable = ({
@@ -14,6 +15,7 @@ const MobileTable = ({
   getProgressBadge,
   sortedApplications,
   onDeleteClick,
+  onEditClick,
 }: Props) => {
   return (
     <div className="lg:hidden">
@@ -48,7 +50,10 @@ const MobileTable = ({
             </div>
 
             <div className="flex space-x-3">
-              <button className="text-purple-600 hover:text-purple-900 text-sm font-medium transition-colors duration-150">
+              <button
+                onClick={() => onEditClick(application)}
+                className="text-purple-600 hover:text-purple-900 transition-colors duration-150"
+              >
                 Edit
               </button>
               <button

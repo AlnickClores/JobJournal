@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { deleteApplication } from "@/app/services/applicationService";
 import DeleteConfirmationModal from "../../ui/DeleteConfirmationModal";
+import UpdateApplicationFormModal from "../../ui/UpdateApplicationFormModal";
 
 const Dashboard = ({
   applications,
@@ -21,6 +22,7 @@ const Dashboard = ({
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
 
   if (!applications || applications.length === 0) {
@@ -36,6 +38,11 @@ const Dashboard = ({
   const handleOpenModal = (application: Application) => {
     setSelectedApp(application);
     setIsModalOpen(true);
+  };
+
+  const handleUpdateModal = (application: Application) => {
+    setSelectedApp(application);
+    setUpdateModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
@@ -84,6 +91,7 @@ const Dashboard = ({
           getProgressBadge={getProgressBadge}
           sortedApplications={sortedApplications}
           onDeleteClick={handleOpenModal}
+          onEditClick={handleUpdateModal}
         />
 
         <MobileTable
@@ -92,6 +100,7 @@ const Dashboard = ({
           getProgressBadge={getProgressBadge}
           sortedApplications={sortedApplications}
           onDeleteClick={handleOpenModal}
+          onEditClick={handleUpdateModal}
         />
       </div>
 
@@ -104,6 +113,11 @@ const Dashboard = ({
             ? `${selectedApp.position_applied} at ${selectedApp.company_name}`
             : undefined
         }
+      />
+      <UpdateApplicationFormModal
+        isOpen={updateModalOpen}
+        onClose={() => setUpdateModalOpen(false)}
+        application={selectedApp}
       />
     </div>
   );

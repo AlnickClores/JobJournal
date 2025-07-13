@@ -76,11 +76,11 @@ export const updateApplication = async (req: Request, res: Response) => {
     const applicationId = parseInt(req.params.applicationId, 10);
 
     const {
-      company_name,
-      position_applied,
-      date_applied,
+      companyName,
+      positionApplied,
+      dateApplied,
       progress,
-      interview_date,
+      interviewDate,
     } = req.body;
 
     const applicationExists = await checkIfApplicationExists(applicationId);
@@ -92,11 +92,11 @@ export const updateApplication = async (req: Request, res: Response) => {
 
     const updateApplication = await updateUserApplication(
       applicationId,
-      company_name || applicationExists.company_name,
-      position_applied || applicationExists.position_applied,
-      date_applied || applicationExists.date_applied,
+      companyName || applicationExists.company_name,
+      positionApplied || applicationExists.position_applied,
+      dateApplied || applicationExists.date_applied,
       progress || applicationExists.progress,
-      interview_date || applicationExists.interview_date
+      interviewDate || applicationExists.interview_date
     );
 
     res.status(200).json({

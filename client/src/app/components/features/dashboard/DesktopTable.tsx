@@ -7,6 +7,7 @@ interface Props {
   getProgressBadge: (progress: string) => JSX.Element;
   sortedApplications: Application[];
   onDeleteClick: (app: Application) => void;
+  onEditClick: (app: Application) => void;
 }
 
 const DesktopTable = ({
@@ -14,6 +15,7 @@ const DesktopTable = ({
   getProgressBadge,
   sortedApplications,
   onDeleteClick,
+  onEditClick,
 }: Props) => {
   return (
     <div className="hidden lg:block overflow-x-auto">
@@ -68,7 +70,10 @@ const DesktopTable = ({
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <div className="flex space-x-2">
-                  <button className="text-purple-600 hover:text-purple-900 transition-colors duration-150">
+                  <button
+                    onClick={() => onEditClick(application)}
+                    className="text-purple-600 hover:text-purple-900 transition-colors duration-150"
+                  >
                     Edit
                   </button>
                   <button

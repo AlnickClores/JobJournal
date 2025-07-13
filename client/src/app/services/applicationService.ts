@@ -42,6 +42,28 @@ export const insertApplication = async (
   }
 };
 
+export const updateApplication = async (
+  applicationId: number,
+  updatedApplication: object
+) => {
+  try {
+    const token = sessionStorage.getItem("token");
+    const response = await axios.put(
+      `${API_BASE_URL}/updateApplication/${applicationId}`,
+      updatedApplication,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating the application: ", error);
+    throw error;
+  }
+};
+
 export const deleteApplication = async (applicationId: number) => {
   try {
     const token = sessionStorage.getItem("token");
@@ -55,6 +77,7 @@ export const deleteApplication = async (applicationId: number) => {
     );
     return response.data;
   } catch (error) {
-    console.log("Error deleting application with id: ", applicationId);
+    console.log("Error deleting application: ", error);
+    throw error;
   }
 };

@@ -45,8 +45,9 @@ export const updateUserApplication = async (
   positionApplied: string,
   dateApplied: string,
   progress: string,
-  interviewDate: string
+  interviewDate: string | null
 ) => {
+  const cleanedInterviewDate = interviewDate === "" ? null : interviewDate;
   const sql =
     "UPDATE applications SET company_name = ?, position_applied = ?, date_applied = ?, progress = ?, interview_date = ? WHERE id = ?";
   const [result] = await pool.query(sql, [
@@ -54,7 +55,7 @@ export const updateUserApplication = async (
     positionApplied,
     dateApplied,
     progress,
-    interviewDate,
+    cleanedInterviewDate,
     application_id,
   ]);
 
