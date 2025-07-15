@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signup } from "@/app/services/authService";
 import { useRouter } from "next/navigation";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { validatePassword } from "@/app/utils/validatePassword";
 
 const SignupForm = () => {
   const router = useRouter();
@@ -18,13 +19,32 @@ const SignupForm = () => {
   });
   const [message, setMessage] = useState("");
 
+  const [passwordValidation, setPasswordValidation] = useState({
+    minLength: false,
+    hasUppercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+    isValid: false,
+  });
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "password" || name === "confirmPassword") {
+      const validation = validatePassword(value);
+      setPasswordValidation(validation);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validatePassword(formData.password).isValid) {
+      alert("Password does not meet all requirements.");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
@@ -130,6 +150,39 @@ const SignupForm = () => {
           </button>
         </div>
       </div>
+
+      <ul className="text-xs text-gray-600 mt-2 space-y-1">
+        <li
+          className={
+            passwordValidation.minLength ? "text-green-600" : "text-red-500"
+          }
+        >
+          • At least 8 characters
+        </li>
+        <li
+          className={
+            passwordValidation.hasUppercase ? "text-green-600" : "text-red-500"
+          }
+        >
+          • Contains an uppercase letter
+        </li>
+        <li
+          className={
+            passwordValidation.hasNumber ? "text-green-600" : "text-red-500"
+          }
+        >
+          • Contains a number
+        </li>
+        <li
+          className={
+            passwordValidation.hasSpecialChar
+              ? "text-green-600"
+              : "text-red-500"
+          }
+        >
+          • Contains a special character
+        </li>
+      </ul>
 
       <p className="text-center font-semibold text-red-500">{message}</p>
 
