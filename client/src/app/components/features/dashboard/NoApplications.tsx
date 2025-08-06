@@ -1,6 +1,8 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const NoApplications = () => {
+  const router = useRouter();
   return (
     <div>
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100">
@@ -27,7 +29,10 @@ const NoApplications = () => {
             <p className="text-gray-600 mb-6">
               Start tracking your job applications to see them here.
             </p>
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md font-medium transition-colors duration-200">
+            <button
+              onClick={() => router.push("/applicationForm")}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"
+            >
               Add Your First Application
             </button>
           </div>
